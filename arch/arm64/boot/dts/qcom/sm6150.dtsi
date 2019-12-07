@@ -1,4 +1,5 @@
  /* Copyright (c) 2018-2019, The Linux Foundation.All rights reserved.
+  * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -2661,7 +2662,6 @@
 		reg = <0x0 0x200000>;
 		reg-names = "rmtfs";
 		qcom,client-id = <0x00000001>;
-		qcom,guard-memory;
 	};
 
 	llcc_pmu: llcc-pmu@90cc000 {

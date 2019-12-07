@@ -1,4 +1,5 @@
 /* Copyright (c) 2019, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -17,8 +18,6 @@
 #include <dt-bindings/clock/qcom,camcc-sdmmagpie.h>
 
 #include "sdmmagpie-atp.dtsi"
-#include "sdmmagpie-ext-codec-audio-overlay.dtsi"
-#include "sdmmagpie-external-codec.dtsi"
 
 / {
 	model = "ATP";
