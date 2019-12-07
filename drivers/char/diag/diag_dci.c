@@ -1,4 +1,5 @@
 /* Copyright (c) 2012-2018, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -2567,7 +2568,7 @@ static int dci_fill_log_mask(unsigned char *dest_ptr, unsigned char *src_ptr)
 	int header_len = sizeof(struct diag_ctrl_log_mask);
 
 	header.cmd_type = DIAG_CTRL_MSG_LOG_MASK;
-	header.num_items = LOG_SIZE_TO_ITEMS(DCI_MAX_ITEMS_PER_LOG_CODE);
+	header.num_items = DCI_MAX_ITEMS_PER_LOG_CODE;
 	header.data_len = 11 + DCI_MAX_ITEMS_PER_LOG_CODE;
 	header.stream_id = DCI_MASK_STREAM;
 	header.status = 3;
