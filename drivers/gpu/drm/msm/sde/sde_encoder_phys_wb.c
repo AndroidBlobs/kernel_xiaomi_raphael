@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2015-2018 The Linux Foundation. All rights reserved.
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -873,7 +874,7 @@ static void _sde_encoder_phys_wb_update_cwb_flush(
 	dspp_out = (cwb_capture_mode == CAPTURE_DSPP_OUT);
 	need_merge = (crtc->num_mixers > 1) ? true : false;
 
-	if (src_pp_idx > CWB_0 ||  ((cwb_idx + crtc->num_mixers) > CWB_MAX)) {
+	if (src_pp_idx > LM_0 ||  ((cwb_idx + crtc->num_mixers) > CWB_MAX)) {
 		SDE_ERROR("invalid hw config for CWB\n");
 		return;
 	}

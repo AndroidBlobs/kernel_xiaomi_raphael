@@ -1,4 +1,5 @@
 /* Copyright (c) 2015-2018, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -3420,17 +3421,15 @@ static int sde_parse_merge_3d_dt(struct device_node *np,
 	rc = _validate_dt_entry(np, merge_3d_prop, ARRAY_SIZE(merge_3d_prop),
 		prop_count, &off_count);
 	if (rc)
-		goto end;
+		goto error;
 
 	sde_cfg->merge_3d_count = off_count;
 
 	rc = _read_dt_entry(np, merge_3d_prop, ARRAY_SIZE(merge_3d_prop),
 			prop_count,
 			prop_exists, prop_value);
-	if (rc) {
-		sde_cfg->merge_3d_count = 0;
-		goto end;
-	}
+	if (rc)
+		goto error;
 
 	for (i = 0; i < off_count; i++) {
 		merge_3d = sde_cfg->merge_3d + i;
@@ -3441,7 +3440,9 @@ static int sde_parse_merge_3d_dt(struct device_node *np,
 		merge_3d->len = PROP_VALUE_ACCESS(prop_value, HW_LEN, 0);
 	}
 
-end:
+	return 0;
+error:
+	sde_cfg->merge_3d_count = 0;
 	kfree(prop_value);
 fail:
 	return rc;
