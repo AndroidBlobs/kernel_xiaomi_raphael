@@ -3,6 +3,7 @@
  *  linux/mm/vmscan.c
  *
  *  Copyright (C) 1991, 1992, 1993, 1994  Linus Torvalds
+ *  Copyright (C) 2019 XiaoMi, Inc.
  *
  *  Swap reorganised 29.12.95, Stephen Tweedie.
  *  kswapd added: 7.1.96  sct
@@ -349,6 +350,16 @@ static unsigned long do_shrink_slab(struct shrink_control *shrinkctl,
 	delta = freeable >> priority;
 	delta *= 4;
 	do_div(delta, shrinker->seeks);
+
+	/*
+	 * Make sure we apply some minimal pressure on default priority
+	 * even on small cgroups. Stale objects are not only consuming memory
+	 * by themselves, but can also hold a reference to a dying cgroup,
+	 * preventing it from being reclaimed. A dying cgroup with all
+	 * corresponding structures like per-cpu stats and kmem caches
+	 * can be really big, so it may lead to a significant waste of memory.
+	 */
+	delta = max_t(unsigned long long, delta, min(freeable, batch_size));
 
 	total_scan += delta;
 	if (total_scan < 0) {
@@ -1847,13 +1858,13 @@ shrink_inactive_list(unsigned long nr_to_scan, struct lruvec *lruvec,
 		if (stalled)
 			return 0;
 
-		/* We are about to die and free our memory. Return now. */
-		if (fatal_signal_pending(current))
-			return SWAP_CLUSTER_MAX;
-
 		/* wait a bit for the reclaimer. */
 		msleep(100);
 		stalled = true;
+
+		/* We are about to die and free our memory. Return now. */
+		if (fatal_signal_pending(current))
+			return SWAP_CLUSTER_MAX;
 	}
 
 	lru_add_drain();
