@@ -15,6 +15,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  * Copyright (C) 2013 ARM Limited
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * Author: Will Deacon <will.deacon@arm.com>
  */
@@ -192,7 +193,6 @@ enum arm_smmu_s2cr_privcfg {
 #define ARM_SMMU_CB_ATS1PR		0x800
 #define ARM_SMMU_CB_ATSR		0x8f0
 #define ARM_SMMU_STATS_SYNC_INV_TBU_ACK 0x25dc
-#define ARM_SMMU_TBU_PWR_STATUS         0x2204
 
 #define SCTLR_SHCFG_SHIFT		22
 #define SCTLR_SHCFG_MASK		0x3

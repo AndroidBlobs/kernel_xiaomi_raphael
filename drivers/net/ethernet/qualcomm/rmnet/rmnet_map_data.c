@@ -1,4 +1,5 @@
 /* Copyright (c) 2013-2018, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -522,16 +523,15 @@ new_packet:
 		 * sparse, don't aggregate. We will need to tune this later
 		 */
 		diff = timespec_sub(port->agg_last, last);
-		size = port->egress_agg_size - skb->len;
 
-		if (diff.tv_sec > 0 || diff.tv_nsec > rmnet_agg_bypass_time ||
-		    size <= 0) {
+		if (diff.tv_sec > 0 || diff.tv_nsec > rmnet_agg_bypass_time) {
 			spin_unlock_irqrestore(&port->agg_lock, flags);
 			skb->protocol = htons(ETH_P_MAP);
 			dev_queue_xmit(skb);
 			return;
 		}
 
+		size = port->egress_agg_size - skb->len;
 		port->agg_skb = skb_copy_expand(skb, 0, size, GFP_ATOMIC);
 		if (!port->agg_skb) {
 			port->agg_skb = 0;
