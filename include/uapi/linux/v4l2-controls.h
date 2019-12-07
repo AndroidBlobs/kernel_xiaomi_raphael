@@ -3,6 +3,7 @@
  *  Video for Linux Two controls header file
  *
  *  Copyright (C) 1999-2012 the contributors
+ *  Copyright (C) 2019 XiaoMi, Inc.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -747,9 +748,6 @@ enum v4l2_mpeg_vidc_extradata {
 	V4L2_MPEG_VIDC_EXTRADATA_VUI_DISPLAY = 29,
 	V4L2_MPEG_VIDC_EXTRADATA_VPX_COLORSPACE = 30,
 	V4L2_MPEG_VIDC_EXTRADATA_UBWC_CR_STATS_INFO = 31,
-#define V4L2_MPEG_VIDC_EXTRADATA_ENC_FRAME_QP \
-	V4L2_MPEG_VIDC_EXTRADATA_ENC_FRAME_QP
-	V4L2_MPEG_VIDC_EXTRADATA_ENC_FRAME_QP = 32,
 };
 
 #define V4L2_CID_MPEG_VIDEO_MULTI_SLICE_DELIVERY_MODE	\
@@ -1055,14 +1053,6 @@ enum v4l2_mpeg_vidc_video_flip {
 	(V4L2_CID_MPEG_MSM_VIDC_BASE + 130)
 #define V4L2_CID_MPEG_VIDC_VENC_BITRATE_SAVINGS \
 	(V4L2_CID_MPEG_MSM_VIDC_BASE + 131)
-#define V4L2_CID_MPEG_VIDC_VIDEO_ROI_TYPE \
-	(V4L2_CID_MPEG_MSM_VIDC_BASE + 132)
-enum v4l2_mpeg_vidc_video_roi_type {
-	V4L2_CID_MPEG_VIDC_VIDEO_ROI_TYPE_NONE = 0,
-	V4L2_CID_MPEG_VIDC_VIDEO_ROI_TYPE_2BIT = 1,
-	V4L2_CID_MPEG_VIDC_VIDEO_ROI_TYPE_2BYTE = 2,
-};
-
 
 /*  Camera class control IDs */
 
