@@ -4,6 +4,7 @@
  * Header file for Host Controller registers and I/O accessors.
  *
  *  Copyright (C) 2005-2008 Pierre Ossman, All Rights Reserved.
+ *  Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -654,6 +655,7 @@ struct sdhci_host {
 
 	bool sdio_irq_async_status;
 	bool is_crypto_en;
+	bool crypto_reset_reqd;
 
 	u32 auto_cmd_err_sts;
 	struct ratelimit_state dbg_dump_rs;
