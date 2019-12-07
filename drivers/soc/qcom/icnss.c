@@ -1,4 +1,5 @@
 /* Copyright (c) 2015-2019, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -1157,8 +1158,7 @@ static int icnss_driver_event_pd_service_down(struct icnss_priv *priv,
 		goto out;
 	}
 
-	if (!test_bit(ICNSS_PD_RESTART, &priv->state))
-		icnss_fw_crashed(priv, event_data);
+	icnss_fw_crashed(priv, event_data);
 
 out:
 	kfree(data);

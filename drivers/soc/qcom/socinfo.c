@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2009-2019, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2009-2018, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -70,6 +71,10 @@ enum {
 	HW_PLATFORM_HDK = 31,
 	HW_PLATFORM_IOT = 32,
 	HW_PLATFORM_IDP = 34,
+	HW_PLATFORM_F1  = 37,
+	HW_PLATFORM_F10 = 38,
+	HW_PLATFORM_E5G = 39,
+	HW_PLATFORM_F11 = 40,
 	HW_PLATFORM_INVALID
 };
 
@@ -93,7 +98,11 @@ const char *hw_platform[] = {
 	[HW_PLATFORM_ADP] = "ADP",
 	[HW_PLATFORM_HDK] = "HDK",
 	[HW_PLATFORM_IOT] = "IOT",
-	[HW_PLATFORM_IDP] = "IDP"
+	[HW_PLATFORM_IDP] = "IDP",
+	[HW_PLATFORM_F1]  = "CEPHEUS",
+	[HW_PLATFORM_F10] = "DAVINCI",
+	[HW_PLATFORM_E5G] = "ANDROMEDA",
+	[HW_PLATFORM_F11] = "RAPHAEL"
 };
 
 enum {
@@ -344,9 +353,6 @@ static struct msm_soc_info cpu_of_id[] = {
 	/* sm6150 ID */
 	[355] = {MSM_CPU_SM6150, "SM6150"},
 
-	/* sm6150p ID */
-	[369] = {MSM_CPU_SM6150P, "SM6150P"},
-
 	/* qcs405 ID */
 	[352] = {MSM_CPU_QCS405, "QCS405"},
 
@@ -361,9 +367,6 @@ static struct msm_soc_info cpu_of_id[] = {
 
 	/* sdmmagpie ID */
 	[365] = {MSM_CPU_SDMMAGPIE, "SDMMAGPIE"},
-
-	/* sdmmagpiep ID */
-	[366] = {MSM_CPU_SDMMAGPIEP, "SDMMAGPIEP"},
 
 	/* trinket ID */
 	[394] = {MSM_CPU_TRINKET, "TRINKET"},
@@ -1252,10 +1255,6 @@ static void * __init setup_dummy_socinfo(void)
 		dummy_socinfo.id = 355;
 		strlcpy(dummy_socinfo.build_id, "sm6150 - ",
 		sizeof(dummy_socinfo.build_id));
-	} else if (early_machine_is_sm6150p()) {
-		dummy_socinfo.id = 369;
-		strlcpy(dummy_socinfo.build_id, "sm6150p - ",
-		sizeof(dummy_socinfo.build_id));
 	} else if (early_machine_is_qcs405()) {
 		dummy_socinfo.id = 352;
 		strlcpy(dummy_socinfo.build_id, "qcs405 - ",
@@ -1275,10 +1274,6 @@ static void * __init setup_dummy_socinfo(void)
 	} else if (early_machine_is_sdmmagpie()) {
 		dummy_socinfo.id = 365;
 		strlcpy(dummy_socinfo.build_id, "sdmmagpie - ",
-		sizeof(dummy_socinfo.build_id));
-	} else if (early_machine_is_sdmmagpiep()) {
-		dummy_socinfo.id = 366;
-		strlcpy(dummy_socinfo.build_id, "sdmmagpiep - ",
 		sizeof(dummy_socinfo.build_id));
 	} else if (early_machine_is_trinket()) {
 		dummy_socinfo.id = 394;
@@ -1621,6 +1616,70 @@ static void socinfo_select_format(void)
 		socinfo_format = socinfo->v0_1.format;
 	}
 }
+
+const char *product_name_get(void)
+{
+	char *product_name = NULL;
+	size_t size;
+	uint32_t hw_type;
+
+	hw_type = socinfo_get_platform_type();
+
+	product_name = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_ID_VENDOR1, &size);
+	if (IS_ERR_OR_NULL(product_name)) {
+		pr_warn("Can't find SMEM_ID_VENDOR1; falling back on dummy values.\n");
+		return hw_platform[hw_type];
+	}
+
+	return product_name;
+}
+
+EXPORT_SYMBOL(product_name_get);
+
+uint32_t get_hw_country_version(void)
+{
+	uint32_t version = socinfo_get_platform_version();
+	return (version & HW_COUNTRY_VERSION_MASK) >> HW_COUNTRY_VERSION_SHIFT;
+}
+
+EXPORT_SYMBOL(get_hw_country_version);
+
+uint32_t get_hw_version_platform(void)
+{
+	uint32_t hw_type = socinfo_get_platform_type();
+	if (hw_type == HW_PLATFORM_F1)
+		return HARDWARE_PLATFORM_CEPHEUS;
+	else if (hw_type == HW_PLATFORM_F10)
+		return HARDWARE_PLATFORM_DAVINCI;
+	else if (hw_type == HW_PLATFORM_E5G)
+		return HARDWARE_PLATFORM_ANDROMEDA;
+	else if (hw_type == HW_PLATFORM_F11)
+		return HARDWARE_PLATFORM_RAPHAEL;
+	else
+		return HARDWARE_PLATFORM_UNKNOWN;
+}
+EXPORT_SYMBOL(get_hw_version_platform);
+
+uint32_t get_hw_version_major(void)
+{
+	uint32_t version = socinfo_get_platform_version();
+	return (version & HW_MAJOR_VERSION_MASK) >> HW_MAJOR_VERSION_SHIFT;
+}
+EXPORT_SYMBOL(get_hw_version_major);
+
+uint32_t get_hw_version_minor(void)
+{
+	uint32_t version = socinfo_get_platform_version();
+	return (version & HW_MINOR_VERSION_MASK) >> HW_MINOR_VERSION_SHIFT;
+}
+EXPORT_SYMBOL(get_hw_version_minor);
+
+uint32_t get_hw_version_build(void)
+{
+	uint32_t version = socinfo_get_platform_version();
+	return (version & HW_BUILD_VERSION_MASK) >> HW_BUILD_VERSION_SHIFT;
+}
+EXPORT_SYMBOL(get_hw_version_build);
 
 int __init socinfo_init(void)
 {

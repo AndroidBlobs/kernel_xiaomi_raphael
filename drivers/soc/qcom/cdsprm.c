@@ -2,6 +2,7 @@
  * CDSP Request Manager
  *
  * Copyright (c) 2018, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -60,7 +61,7 @@
 #define SYSMON_CDSP_QOS_FLAG_DISABLE	2
 #define QOS_LATENCY_DISABLE_VALUE	-1
 #define SYS_CLK_TICKS_PER_MS		19200
-#define CDSPRM_MSG_QUEUE_DEPTH		50
+#define CDSPRM_MSG_QUEUE_DEPTH		10
 #define CDSP_THERMAL_MAX_STATE		10
 #define HVX_THERMAL_MAX_STATE		10
 
@@ -825,7 +826,7 @@ static int cdsprm_rpmsg_callback(struct rpmsg_device *dev, void *data,
 				gcdsprm.msg_queue_idx = 0;
 		} else {
 			spin_unlock_irqrestore(&gcdsprm.list_lock, flags);
-			dev_dbg(&dev->dev,
+			dev_err(&dev->dev,
 				"Unable to queue cdsp request, no memory\n");
 			return -ENOMEM;
 		}
